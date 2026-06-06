@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantarian - Welcome</title>
+    <style>
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background-color: var(--panel);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C11.66,20 14.5,17.16 14.5,13.67C14.5,12.78 14.33,11.94 14,11.16C16,9.5 17,6.5 17,2H15.5C15.5,6 15,8 13.5,9.5C12.5,10.5 11.5,11 10,11C9.17,11 8.33,10.83 7.5,10.5C6,9 6,6.5 6,2H4.5C4.5,6.5 5.5,10 7.5,12.5C8.33,13.5 9.17,14 10,14C11.66,14 13,12.66 13,11C13,10.17 12.83,9.33 12.5,8.5C11.5,8 10,8 8,8.5C6.5,9 5,10 4,11.5C3,13 2.5,15 2.5,17C2.5,20.31 5.19,23 8.5,23C11.81,23 14.5,20.31 14.5,17C14.5,16.17 14.33,15.33 14,14.5C16.5,16.5 19.5,16.5 22,14.5V2H20.5C20.5,6.5 19.5,10 17,12.5C16.17,13.5 15.33,14 14.5,14V8H17Z' /%3E%3C/svg%3E") no-repeat center;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C11.66,20 14.5,17.16 14.5,13.67C14.5,12.78 14.33,11.94 14,11.16C16,9.5 17,6.5 17,2H15.5C15.5,6 15,8 13.5,9.5C12.5,10.5 11.5,11 10,11C9.17,11 8.33,10.83 7.5,10.5C6,9 6,6.5 6,2H4.5C4.5,6.5 5.5,10 7.5,12.5C8.33,13.5 9.17,14 10,14C11.66,14 13,12.66 13,11C13,10.17 12.83,9.33 12.5,8.5C11.5,8 10,8 8,8.5C6.5,9 5,10 4,11.5C3,13 2.5,15 2.5,17C2.5,20.31 5.19,23 8.5,23C11.81,23 14.5,20.31 14.5,17C14.5,16.17 14.33,15.33 14,14.5C16.5,16.5 19.5,16.5 22,14.5V2H20.5C20.5,6.5 19.5,10 17,12.5C16.17,13.5 15.33,14 14.5,14V8H17Z' /%3E%3C/svg%3E") no-repeat center;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dim);
+        }
+
+        input {
+            background-color: var(--bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .toggle-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            display: none;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            Plantarian
+        </div>
+        <p class="subtitle" id="form-subtitle">Welcome back! Please login to continue.</p>
+    </div>
+
+    <div id="error-box" class="error-msg"></div>
+
+    <!-- Login Form -->
+    <form id="login-form">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="login-username" required placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn">Login</button>
+    </form>
+
+    <!-- Register Form (Hidden by default) -->
+    <form id="register-form" style="display: none;">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="reg-username" required placeholder="Choose a username">
+        </div>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="reg-password" required placeholder="Choose a strong password">
+        </div>
+        <button type="submit" class="btn">Create Account</button>
+    </form>
+
+    <div class="toggle-text">
+        <span id="toggle-msg">Don't have an account?</span>
+        <span class="toggle-link" id="toggle-btn">Sign up</span>
+    </div>
+</div>
+
+<script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const toggleMsg = document.getElementById('toggle-msg');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const errorBox = document.getElementById('error-box');
+
+    let isLogin = true;
+
+    toggleBtn.addEventListener('click', () => {
+        isLogin = !isLogin;
+        if (isLogin) {
+            loginForm.style.display = 'flex';
+            registerForm.style.display = 'none';
+            toggleBtn.innerText = 'Sign up';
+            toggleMsg.innerText = "Don't have an account?";
+            formSubtitle.innerText = 'Welcome back! Please login to continue.';
+        } else {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'flex';
+            toggleBtn.innerText = 'Login';
+            toggleMsg.innerText = 'Already have an account?';
+            formSubtitle.innerText = 'Create your account to get started.';
+        }
+        errorBox.style.display = 'none';
+    });
+
+    function showError(msg) {
+        errorBox.innerText = msg;
+        errorBox.style.display = 'block';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            window.location.href = '/';
+        } catch (err) {
+            showError(err.message);
+        }
+    });
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            window.location.href = '/';
+        } catch (err) {
+            showError(err.message);
+        }
+    });
+</script>
+
+</body>
+</html>
