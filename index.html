@@ -409,7 +409,15 @@
         statusDiv.innerText = "Capturing snapshot...";
         
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, 224, 224);
+        
+        // Calculate center crop to avoid squashing
+        const vWidth = video.videoWidth;
+        const vHeight = video.videoHeight;
+        const minSide = Math.min(vWidth, vHeight);
+        const sx = (vWidth - minSide) / 2;
+        const sy = (vHeight - minSide) / 2;
+
+        ctx.drawImage(video, sx, sy, minSide, minSide, 0, 0, 224, 224);
         const base64Image = canvas.toDataURL('image/jpeg', 0.9);
 
         statusDiv.innerText = "Processing on edge engine...";

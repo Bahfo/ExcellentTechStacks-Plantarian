@@ -111,25 +111,67 @@ app.get('/api/auth/me', async (req, res) => {
 });
 
 const CLASS_LABELS = {
-    0:"Apple: Apple scab", 1:"Apple: Cedar apple rust", 2:"Apple: Healthy", 3:"Blueberry: Healthy", 4:"Cherry: Healthy",
-    5:"Corn: Cercospora leaf spot / Gray leaf spot", 6:"Corn: Common rust", 7:"Corn: Healthy", 8:"Corn: Northern Leaf Blight",
-    9:"Peach: Bacterial spot", 10:"Peach: Healthy", 11:"Pepper, bell: Bacterial spot", 12:"Pepper, bell: Healthy",
-    13:"Potato: Early blight", 14:"Potato: Healthy", 15:"Potato: Late blight", 16:"Raspberry: Healthy", 17:"Soybean: Healthy",
-    18:"Squash: Powdery mildew", 19:"Strawberry: Healthy", 20:"Strawberry: Leaf scorch", 21:"Tomato: Early blight",
-    22:"Tomato: Healthy", 23:"Tomato: Late blight", 24:"Tomato: Leaf Mold", 25:"Tomato: Septoria leaf spot", 26:"Tomato: Tomato mosaic virus"
+    0: "Apple: Apple scab",
+    1: "Apple: Black rot",
+    2: "Apple: Cedar apple rust",
+    3: "Apple: Healthy",
+    4: "Blueberry: Healthy",
+    5: "Cherry: Powdery mildew",
+    6: "Cherry: Healthy",
+    7: "Corn: Cercospora leaf spot / Gray leaf spot",
+    8: "Corn: Common rust",
+    9: "Corn: Northern Leaf Blight",
+    10: "Corn: Healthy",
+    11: "Grape: Black rot",
+    12: "Grape: Esca (Black Measles)",
+    13: "Grape: Leaf blight (Isariopsis Leaf Spot)",
+    14: "Grape: Healthy",
+    15: "Orange: Haunglongbing (Citrus greening)",
+    16: "Peach: Bacterial spot",
+    17: "Peach: Healthy",
+    18: "Pepper, bell: Bacterial spot",
+    19: "Pepper, bell: Healthy",
+    20: "Potato: Early blight",
+    21: "Potato: Late blight",
+    22: "Potato: Healthy",
+    23: "Raspberry: Healthy",
+    24: "Soybean: Healthy",
+    25: "Squash: Powdery mildew",
+    26: "Strawberry: Leaf scorch",
+    27: "Strawberry: Healthy",
+    28: "Tomato: Bacterial spot",
+    29: "Tomato: Early blight",
+    30: "Tomato: Late blight",
+    31: "Tomato: Leaf Mold",
+    32: "Tomato: Septoria leaf spot",
+    33: "Tomato: Spider mites (Two-spotted spider mite)",
+    34: "Tomato: Target Spot",
+    35: "Tomato: Tomato Yellow Leaf Curl Virus",
+    36: "Tomato: Tomato mosaic virus",
+    37: "Tomato: Healthy"
 };
 
 const CLASS_TO_SPECIES = {
-    0:"Apple", 1:"Apple", 2:"Apple", 3:"Blueberry", 4:"Cherry", 5:"Corn", 6:"Corn", 7:"Corn", 8:"Corn", 9:"Peach", 10:"Peach",
-    11:"Pepper, bell", 12:"Pepper, bell", 13:"Potato", 14:"Potato", 15:"Potato", 16:"Raspberry", 17:"Soybean", 18:"Squash",
-    19:"Strawberry", 20:"Strawberry", 21:"Tomato", 22:"Tomato", 23:"Tomato", 24:"Tomato", 25:"Tomato", 26:"Tomato"
+    0: "Apple", 1: "Apple", 2: "Apple", 3: "Apple", 4: "Blueberry", 5: "Cherry", 6: "Cherry", 7: "Corn", 8: "Corn", 9: "Corn", 10: "Corn",
+    11: "Grape", 12: "Grape", 13: "Grape", 14: "Grape", 15: "Orange", 16: "Peach", 17: "Peach", 18: "Pepper, bell", 19: "Pepper, bell",
+    20: "Potato", 21: "Potato", 22: "Potato", 23: "Raspberry", 24: "Soybean", 25: "Squash", 26: "Strawberry", 27: "Strawberry",
+    28: "Tomato", 29: "Tomato", 30: "Tomato", 31: "Tomato", 32: "Tomato", 33: "Tomato", 34: "Tomato", 35: "Tomato", 36: "Tomato", 37: "Tomato"
 };
 
 let model;
 
 async function preprocess(base64) {
     const imageBuffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
-    const rgb = await sharp(imageBuffer).resize(224, 224).removeAlpha().raw().toBuffer();
+    
+    // Match Python 'powerful_preprocess': Resize -> CLAHE (on L channel) -> Gaussian Blur
+    const rgb = await sharp(imageBuffer)
+        .resize(224, 224)
+        .clahe({ width: 8, height: 8, maxSlope: 3 })
+        .blur(0.8)
+        .removeAlpha()
+        .raw()
+        .toBuffer();
+    
     return tf.tensor4d(Float32Array.from(rgb, x => (x / 127.5) - 1), [1, 224, 224, 3]);
 }
 

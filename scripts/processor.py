@@ -29,7 +29,8 @@ def powerful_preprocess(img_path):
 def process_and_upload():
     print("Starting Preprocessing & MongoDB Upload...")
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    staging_dir = os.path.abspath(os.path.join(SCRIPT_DIR, "staging_data"))
+    # Go up one level from scripts/ to root to find staging_data
+    staging_dir = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "staging_data"))
 
     col_new.drop()
     

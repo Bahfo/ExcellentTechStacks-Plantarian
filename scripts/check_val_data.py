@@ -8,11 +8,7 @@ for x, y in val_ds.take(1):
     print("--- VALIDATION DATA INTEGRITY CHECK ---")
     print("Image batch shape:", x.shape)
     
-    species_labels = y["speciesLabel"].numpy()
-    class_labels = y["classLabel"].numpy()
+    class_labels = y.numpy()
     
-    print("Species Labels in Batch:", species_labels)
     print("Class Labels in Batch:", class_labels)
-    
-    print("Min/Max Species Label:", np.min(species_labels), "/", np.max(species_labels))
     print("Min/Max Class Label:", np.min(class_labels), "/", np.max(class_labels))
