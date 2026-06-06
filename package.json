@@ -1,0 +1,31 @@
+{
+  "name": "plantarian",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.20.0",
+    "@tensorflow/tfjs-node-gpu": "^4.22.0",
+    "chartjs-node-canvas": "^5.0.0",
+    "dotenv": "^17.4.2",
+    "fs-extra": "^11.3.5",
+    "gridfs-stream": "^1.1.1",
+    "mime-types": "^3.0.2",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.3",
+    "express":"^4.19.2",
+    "sharp":"^0.33.4"
+  },
+  "overrides": {
+    "@tensorflow/tfjs-core": "4.22.0",
+    "@tensorflow/tfjs-layers": "4.22.0"
+  }
+}

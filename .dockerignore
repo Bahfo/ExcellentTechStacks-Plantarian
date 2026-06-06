@@ -1,0 +1,5 @@
+staging_data/
+dataset/
+node_modules/
+*.h5
+.git

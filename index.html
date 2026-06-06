@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantarian Edge Inference Engine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h2 { margin-top: 0; color: #4caf50; }
+        video, canvas {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            background-color: #000;
+            margin-bottom: 15px;
+            transform: scaleX(-1); /* Mirror view for natural use */
+        }
+        #hidden-canvas { display: none; }
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { background-color: #45a049; }
+        #status { 
+            margin: 15px 0; 
+            font-style: italic; 
+            color: #aaa; 
+            padding: 8px;
+            background-color: #252525;
+            border-radius: 4px;
+        }
+        .results-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-left: 4px solid #4caf50;
+            border-radius: 4px;
+            text-align: left;
+            display: none;
+        }
+        .result-line { margin: 8px 0; font-size: 16px; }
+        .highlight { font-weight: bold; color: #4caf50; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Plantarian Real-Time Classifier</h2>
+    <div id="status">Connecting with hardware camera access channels...</div>
+    
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="hidden-canvas" width="224" height="224"></canvas>
+    
+    <button class="btn" id="capture-btn" disabled>Analyze Plant Leaf</button>
+
+    <div class="results-box" id="results-box">
+        <div class="result-line">Predicted Species: <span id="res-species" class="highlight">---</span></div>
+        <div class="result-line">Condition Class: <span id="res-class" class="highlight">---</span></div>
+        <div class="result-line">Inference Confidence: <span id="res-conf" class="highlight">---</span></div>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('hidden-canvas');
+    const captureBtn = document.getElementById('capture-btn');
+    const statusDiv = document.getElementById('status');
+
+    // Automatically trigger the device camera immediately on load
+    window.onload = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: "environment", width: 400, height: 400 }, 
+                audio: false 
+            });
+            video.srcObject = stream;
+            statusDiv.innerText = "System online and standing ready.";
+            captureBtn.disabled = false;
+        } catch (err) {
+            statusDiv.innerText = "Camera Access Error: " + err.message;
+            statusDiv.style.backgroundColor = '#5c1d1d';
+        }
+    };
+
+    captureBtn.addEventListener('click', async () => {
+        statusDiv.innerText = "Capturing framework window snapshot...";
+        
+        // Render active stream frame onto background canvas elements
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, 224, 224);
+        
+        // Convert pixel matrix sequence into lightweight JPEG image string data
+        const base64Image = canvas.toDataURL('image/jpeg', 0.9);
+
+        statusDiv.innerText = "Transmitting image data payload to server...";
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: base64Image })
+            });
+
+            if (!response.ok) throw new Error(`HTTP network fault code: ${response.status}`);
+
+            const data = await response.json();
+
+            // Render details from server back to frontend panel elements
+            document.getElementById('res-species').innerText = data.species;
+            document.getElementById('res-class').innerText = data.condition;
+            document.getElementById('res-conf').innerText = `${data.confidence}%`;
+            document.getElementById('results-box').style.display = 'block';
+            statusDiv.innerText = "Server evaluation cycle completed.";
+
+        } catch (error) {
+            statusDiv.innerText = "Network Error: " + error.message;
+            statusDiv.style.backgroundColor = '#5c1d1d';
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>
