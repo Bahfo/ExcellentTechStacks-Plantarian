@@ -5,3 +5,6 @@ manifests/
 node_modules/
 staging_data/
 temp_tf_saved_model/
+/.env
+env
+.env
