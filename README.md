@@ -82,5 +82,5 @@ npm start
 
 ## Developers
 This project was developed and is maintained by:
-* **bahfo**
 * **m5bvo**
+* **bahfo**
